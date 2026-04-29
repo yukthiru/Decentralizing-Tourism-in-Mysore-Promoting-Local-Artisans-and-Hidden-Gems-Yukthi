@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="artisan-detail container fade-in" style="margin-top: 100px;">
+    <!-- Back Navigation -->
+    <a href="{{ url_for('artisans') }}" class="btn btn-secondary" style="margin-bottom: 2rem;">&larr; Back to Artisans</a>
+    
+    <!-- --- ARTISAN FULL PROFILE --- -->
+    <div class="artisan-profile fade-in">
+        <div class="artisan-header">
+            <h1>{{ artisan.name }}</h1>
+            <p class="artisan-meta">{{ artisan.craft }} &bull; {{ artisan.years_experience }} Years of Experience</p>
+        </div>
+        
+        <div class="artisan-bio">
+            <p>{{ artisan.bio }}</p>
+        </div>
+        
+        <div class="contact-links">
+            {% if artisan.contact_email %}
+            <a href="mailto:{{ artisan.contact_email }}" class="btn btn-primary">Email Artisan</a>
+            {% endif %}
+            
+            {% if artisan.whatsapp %}
+            <!-- WhatsApp formatting to strip spaces and plus signs for the API link -->
+            <a href="https://wa.me/{{ artisan.whatsapp | replace('+', '') | replace(' ', '') }}" target="_blank" class="btn btn-secondary">WhatsApp</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<section class="container fade-in" style="margin-top: 100px;">
+    <h1 class="section-title">Smart Walking Tour Generator</h1>
+    <p style="text-align: center; margin-bottom: 3rem;">Let our AI craft the perfect walking route based on your interests and time.</p>
+
+    <!-- Step 1: Form -->
+    <div class="contact-container" id="tour-form-container" style="max-width: 800px; margin-bottom: 3rem;">
+        <form id="tour-form">
+            <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 250px;">
+                    <div class="form-group">
+                        <label>Duration (Hours): <span id="duration-val">4</span></label>
+                        <input type="range" id="duration" min="2" max="8" value="4" style="width: 100%;">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Start Location</label>
+                        <select id="start-location" class="form-control">
+                            <option>City Centre (Palace)</option>
+                            <option>Railway Station</option>
+                            <option>Bus Stand</option>
+                            <option>Gokulam / Hotel Area</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Pace</label>
+                        <select id="pace" class="form-control">
+                            <option>Leisurely</option>
+                            <option selected>Moderate</option>
+                            <option>Brisk</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="flex: 1; min-width: 250px;">
+                    <div class="form-group">
+                        <label>Interests</label>
+                        <div id="interests" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <label><input type="checkbox" class="interest-check" value="Heritage" checked> Heritage</label>
+                            <label><input type="checkbox" class="interest-check" value="Food" checked> Food</label>
+                            <label><input type="checkbox" class="interest-check" value="Art"> Art & Artisans</label>
+                            <label><input type="checkbox" class="interest-check" value="Nature"> Nature</label>
+                            <label><input type="checkbox" class="interest-check" value="Spiritual"> Spiritual</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;" id="generate-btn">Generate Tour</button>
+            <div id="tour-spinner" class="spinner" style="display: none; margin: 1rem auto;"></div>
+        </form>
+    </div>
+
+    <!-- Step 2: Results -->
+    <div id="tour-results" style="display: none;" class="fade-in">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h2>Your Personalized Tour</h2>
+            <div>
+                <button class="btn btn-secondary" onclick="window.print()">Save as PDF</button>
+                <button class="btn btn-primary" id="regenerate-btn">Regenerate</button>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+            <!-- Timeline -->
+            <div class="tour-timeline" id="tour-timeline" style="flex: 1; min-width: 300px;">
+                <!-- Filled by JS -->
+            </div>
+
+            <!-- Route Map -->
+            <div style="flex: 1; min-width: 300px;">
+                <div id="tour-map" class="map-container" style="height: 500px; position: sticky; top: 100px;"></div>
+            </div>
+        </div>
+        
+        <div id="tour-narrative" style="margin-top: 2rem; padding: 2rem; background: var(--cream); border-radius: 8px; font-style: italic;">
+        </div>
+    </div>
+</section>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const durSlider = document.getElementById('duration');
+        const durVal = document.getElementById('duration-val');
+        if(durSlider && durVal) {
+            durSlider.addEventListener('input', (e) => durVal.textContent = e.target.value);
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mysore Unseen | Beyond the Palace Gates</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo"><a href="{{ url_for('index') }}">Mysore Unseen</a></div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('explore') }}">Explore</a></li>
+                <!-- Dropdown for Discover features -->
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle">Discover &#9662;</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ url_for('hidden_gems') }}">Hidden Gems Map</a></li>
+                        <li><a href="{{ url_for('marketplace') }}">Artisan Marketplace</a></li>
+                        <li><a href="{{ url_for('food_discovery') }}">Food Discovery</a></li>
+                        <li><a href="{{ url_for('walking_tour') }}">Walking Tour</a></li>
+                        <li><a href="{{ url_for('tour_planner') }}">Tour Planner</a></li>
+                        <li><a href="{{ url_for('virtual_market') }}">Virtual Market</a></li>
+                    </ul>
+                </li>
+                <li><a href="{{ url_for('artisans') }}">Artisans</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            </ul>
+            <button class="hamburger">☰</button>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Mysore Unseen. Celebrating local artisans and heritage.</p>
+        </div>
+    </footer>
+
+    <a href="#" id="back-to-top" class="back-to-top">&uarr;</a>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

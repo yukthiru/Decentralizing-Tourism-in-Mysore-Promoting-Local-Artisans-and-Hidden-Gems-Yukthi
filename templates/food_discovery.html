@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Leaflet CSS for mini map -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<section class="hero" style="height: 60vh; min-height: 400px; background: linear-gradient(rgba(28, 15, 6, 0.7), rgba(28, 15, 6, 0.7)), url('https://images.unsplash.com/photo-1589301760014-d929f39ce9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;">
+    <div>
+        <h1 class="fade-in">Eat Like a Mysorean</h1>
+        <p class="fade-in">Discover authentic local food, far from tourist traps.</p>
+    </div>
+</section>
+
+<section class="container fade-in">
+    <!-- Filter Bar -->
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 2rem;">
+        <div class="filter-bar" id="food-filter" style="margin-bottom: 0;">
+            <button class="filter-btn active" data-filter="All">All</button>
+            <button class="filter-btn" data-filter="Street Food">Street Food</button>
+            <button class="filter-btn" data-filter="Sweet Shop">Sweet Shop</button>
+            <button class="filter-btn" data-filter="Dhaba">Dhaba</button>
+            <button class="filter-btn" data-filter="Home Kitchen">Home Kitchen</button>
+            <button class="filter-btn" data-filter="Farm Fresh">Farm Fresh</button>
+        </div>
+        
+        <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: bold; margin-top: 1rem;">
+            <span>Veg Only:</span>
+            <label class="switch">
+                <input type="checkbox" id="veg-toggle">
+                <span class="slider round"></span>
+            </label>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 2rem; flex-wrap: wrap-reverse;">
+        <!-- Food Grid -->
+        <div class="card-grid" id="food-grid" style="flex: 2; min-width: 300px;">
+            <p>Loading food spots...</p>
+        </div>
+
+        <!-- Mini Map -->
+        <div style="flex: 1; min-width: 300px;">
+            <div id="food-map" class="map-container" style="height: 400px; position: sticky; top: 100px;"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if(typeof initFoodDiscovery === 'function') initFoodDiscovery();
+    });
+</script>
+{% endblock %}

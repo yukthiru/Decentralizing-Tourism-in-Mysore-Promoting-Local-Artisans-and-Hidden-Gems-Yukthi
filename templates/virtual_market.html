@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="hero" style="height: 50vh; min-height: 300px; background: linear-gradient(rgba(28, 15, 6, 0.8), rgba(28, 15, 6, 0.8)), url('https://images.unsplash.com/photo-1548013146-72479768bada?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;">
+    <div>
+        <h1 class="fade-in">Walk the Markets of Mysore</h1>
+        <p class="fade-in">Experience the sounds, colors, and crafts of local bazaars virtually.</p>
+        <button id="virtual-walk-toggle" class="btn btn-primary" style="margin-top: 1rem;">Start Virtual Walk</button>
+    </div>
+</section>
+
+<section class="container fade-in">
+    <!-- Market Area Tabs -->
+    <div class="filter-bar" id="market-area-tabs" style="justify-content: center; margin-bottom: 2rem;">
+        <button class="filter-btn active" data-area="All">All Markets</button>
+        <button class="filter-btn" data-area="Devaraja Market">Devaraja Market</button>
+        <button class="filter-btn" data-area="Krishnaraja Market">Krishnaraja Market</button>
+        <button class="filter-btn" data-area="Sayyaji Rao Road">Sayyaji Rao Road</button>
+        <button class="filter-btn" data-area="Silk Board">Silk Board</button>
+        <button class="filter-btn" data-area="Chamundi Hill Bazaar">Chamundi Hill Bazaar</button>
+    </div>
+
+    <!-- Stalls Container -->
+    <div id="stalls-container" style="display: flex; flex-direction: column; gap: 3rem;">
+        <p>Loading market stalls...</p>
+    </div>
+</section>
+
+<!-- Floating Inquiry Cart -->
+<div class="cart-widget" id="cart-widget">
+    <div class="cart-header" id="cart-toggle" style="cursor: pointer; background: var(--saffron); color: white; padding: 1rem; border-radius: 8px 8px 0 0; font-weight: bold; display: flex; justify-content: space-between;">
+        <span>🛒 Inquiry Cart</span>
+        <span id="cart-count">0</span>
+    </div>
+    <div class="cart-body" id="cart-body" style="display: none; background: white; padding: 1rem; border: 1px solid #ccc; border-top: none; border-radius: 0 0 8px 8px;">
+        <div id="cart-items" style="max-height: 200px; overflow-y: auto; margin-bottom: 1rem; font-size: 0.9rem;"></div>
+        <button class="btn btn-primary" id="send-inquiry-btn" style="width: 100%; font-size: 0.9rem;">Send via WhatsApp</button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if(typeof initVirtualMarket === 'function') initVirtualMarket();
+    });
+</script>
+{% endblock %}

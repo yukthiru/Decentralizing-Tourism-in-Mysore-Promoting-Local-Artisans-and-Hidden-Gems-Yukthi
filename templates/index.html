@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- --- HERO SECTION --- -->
+<section class="hero">
+    <div>
+        <h1 class="fade-in">Beyond the Palace Gates</h1>
+        <p class="fade-in">Discover Mysore through its craftspeople, bylanes & untold stories</p>
+        <div class="hero-btns fade-in">
+            <a href="{{ url_for('explore') }}" class="btn btn-primary">Explore Hidden Gems</a>
+            <a href="{{ url_for('artisans') }}" class="btn btn-secondary">Meet the Artisans</a>
+        </div>
+    </div>
+</section>
+
+<!-- --- NEW TEASERS --- -->
+<section class="container fade-in" style="margin-top: 4rem;">
+    <div class="card-grid">
+        <div class="card" style="background: var(--ivory); border: 1px solid var(--gold); text-align: center;">
+            <h3 style="color: var(--saffron);">Plan Your Mysore Journey</h3>
+            <p>Use our AI planner to create a personalized itinerary.</p>
+            <a href="{{ url_for('tour_planner') }}" class="btn btn-secondary" style="margin-top: auto;">Tour Planner</a>
+        </div>
+        <div class="card" style="background: var(--ivory); border: 1px solid var(--gold); text-align: center;">
+            <h3 style="color: var(--saffron);">Explore Virtual Market</h3>
+            <p>Browse stalls, watch demos, and connect with sellers.</p>
+            <a href="{{ url_for('virtual_market') }}" class="btn btn-secondary" style="margin-top: auto;">Virtual Market</a>
+        </div>
+        {% if featured_food %}
+        <div class="card" style="background: var(--ivory); border: 1px solid var(--gold); text-align: center;">
+            <h3 style="color: var(--saffron);">Featured Local Food</h3>
+            <p><strong>{{ featured_food.name }}</strong> - {{ featured_food.specialty_dish }}</p>
+            <a href="{{ url_for('food_discovery') }}" class="btn btn-secondary" style="margin-top: auto;">Food Discovery</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- --- FEATURES / WHY MYSORE UNSEEN --- -->
+<section class="features container fade-in">
+    <h2 class="section-title">Why Mysore Unseen</h2>
+    <div class="card-grid">
+        <div class="card">
+            <h3>Authentic Experiences</h3>
+            <p>Go beyond the usual tourist spots to discover the true essence of Mysore's rich heritage.</p>
+        </div>
+        <div class="card">
+            <h3>Support Local Art</h3>
+            <p>Connect directly with traditional artisans and help sustain generations of craftsmanship.</p>
+        </div>
+        <div class="card">
+            <h3>Untold Stories</h3>
+            <p>Learn the fascinating history behind hidden monuments, quiet lakes, and vibrant markets.</p>
+        </div>
+    </div>
+</section>
+
+<!-- --- FEATURED GEMS --- -->
+<section class="featured-gems container fade-in">
+    <h2 class="section-title">Featured Gems</h2>
+    <div class="card-grid">
+        {% for gem in featured_gems %}
+        <div class="card">
+            <h3>{{ gem.name }}</h3>
+            <span class="card-badge">{{ gem.category }}</span>
+            <p>{{ gem.description }}</p>
+            <a href="{{ gem.directions_url }}" target="_blank" class="btn btn-secondary" style="margin-top: auto;">Get Directions</a>
+        </div>
+        {% else %}
+        <p>No featured gems available yet.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- --- FEATURED ARTISANS --- -->
+<section class="featured-artisans container fade-in">
+    <h2 class="section-title">Featured Artisans</h2>
+    <div class="card-grid">
+        {% for artisan in featured_artisans %}
+        <div class="card">
+            <h3>{{ artisan.name }}</h3>
+            <span class="card-badge">{{ artisan.craft }}</span>
+            <p>{{ artisan.short_bio }}</p>
+            <a href="{{ url_for('artisan_detail', artisan_id=artisan.id) }}" class="btn btn-secondary" style="margin-top: auto;">View Profile</a>
+        </div>
+        {% else %}
+        <p>No featured artisans available yet.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

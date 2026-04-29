@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="artisans-header container fade-in" style="margin-top: 100px;">
+    <h1 class="section-title">Meet the Artisans</h1>
+    <p style="text-align: center; margin-bottom: 3rem; max-width: 800px; margin-inline: auto;">
+        Discover the masters preserving Mysore's ancient crafts. Connect with them directly to support local heritage and take home an authentic piece of our city.
+    </p>
+
+    <!-- --- ARTISANS GRID --- -->
+    <div class="card-grid">
+        {% for artisan in artisans %}
+        <div class="card fade-in">
+            <h3>{{ artisan.name }}</h3>
+            <span class="card-badge">{{ artisan.craft }}</span>
+            <p>{{ artisan.short_bio }}</p>
+            <a href="{{ url_for('artisan_detail', artisan_id=artisan.id) }}" class="btn btn-primary" style="margin-top: auto; text-align: center;">View Profile</a>
+        </div>
+        {% else %}
+        <p>No artisans found in the database.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

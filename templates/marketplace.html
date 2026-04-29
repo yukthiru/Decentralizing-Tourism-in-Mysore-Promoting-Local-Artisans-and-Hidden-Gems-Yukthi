@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="container fade-in" style="margin-top: 100px;">
+    <h1 class="section-title">Artisan Marketplace</h1>
+    <p style="text-align: center; margin-bottom: 3rem;">Support local artisans by buying authentic crafts directly from them.</p>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar" id="market-filter">
+        <button class="filter-btn active" data-filter="All">All</button>
+        <button class="filter-btn" data-filter="Silk">Silk</button>
+        <button class="filter-btn" data-filter="Wood">Wood</button>
+        <button class="filter-btn" data-filter="Incense">Incense</button>
+        <button class="filter-btn" data-filter="Painting">Painting</button>
+        <button class="filter-btn" data-filter="Metal">Metal</button>
+        <button class="filter-btn" data-filter="Sandalwood">Sandalwood</button>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="card-grid" id="product-grid">
+        <p>Loading products...</p>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if(typeof fetchProducts === 'function') fetchProducts('All');
+    });
+</script>
+{% endblock %}

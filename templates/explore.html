@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="explore-header container fade-in" style="margin-top: 100px;">
+    <h1 class="section-title">Explore Hidden Gems</h1>
+    <p style="text-align: center; margin-bottom: 3rem; max-width: 800px; margin-inline: auto;">
+        Discover the off-beat pathways, serene nature spots, and rich cultural heritage that makes Mysore truly special. Filter by category to find your next adventure.
+    </p>
+    
+    <!-- --- FILTER BAR --- -->
+    <div class="filter-bar">
+        <button class="filter-btn active" data-filter="All">All</button>
+        <button class="filter-btn" data-filter="Heritage">Heritage</button>
+        <button class="filter-btn" data-filter="Food">Food</button>
+        <button class="filter-btn" data-filter="Nature">Nature</button>
+        <button class="filter-btn" data-filter="Spiritual">Spiritual</button>
+        <button class="filter-btn" data-filter="Art">Art</button>
+    </div>
+
+    <!-- --- GEMS GRID --- -->
+    <!-- Content is populated dynamically via Javascript fetch to /api/gems -->
+    <div class="card-grid" id="gem-grid">
+        <!-- JS will render cards here -->
+    </div>
+</section>
+{% endblock %}

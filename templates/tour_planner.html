@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="container fade-in" style="margin-top: 100px;">
+    <h1 class="section-title">AI Tour Planner</h1>
+    <p style="text-align: center; margin-bottom: 3rem;">Generate a complete Mysore itinerary matching your budget, time, and interests.</p>
+
+    <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+        <!-- Step 1: Form -->
+        <div class="contact-container" style="flex: 1; min-width: 300px; padding: 2rem;">
+            <form id="planner-form">
+                <div class="form-group">
+                    <label>Total Budget: ₹<span id="budget-val">15000</span></label>
+                    <input type="range" id="budget" min="1000" max="50000" step="500" value="15000" style="width: 100%;">
+                </div>
+                
+                <div style="display: flex; gap: 1rem;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Days</label>
+                        <input type="number" id="days" class="form-control" min="1" max="7" value="3">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Travelers</label>
+                        <input type="number" id="travelers" class="form-control" min="1" max="10" value="2">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Interests</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                        <label><input type="checkbox" class="plan-interest" value="Heritage" checked> Heritage</label>
+                        <label><input type="checkbox" class="plan-interest" value="Food" checked> Food</label>
+                        <label><input type="checkbox" class="plan-interest" value="Art"> Art</label>
+                        <label><input type="checkbox" class="plan-interest" value="Nature"> Nature</label>
+                        <label><input type="checkbox" class="plan-interest" value="Shopping"> Shopping</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Stay Preference</label>
+                    <select id="stay-type" class="form-control">
+                        <option>Budget</option>
+                        <option selected>Mid-range</option>
+                        <option>Heritage Hotel</option>
+                        <option>Homestay</option>
+                        <option>Hostel</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Dietary Preference</label>
+                    <select id="diet" class="form-control">
+                        <option>Vegetarian</option>
+                        <option>Non-Vegetarian</option>
+                        <option selected>Both</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Generate Plan</button>
+                <div id="planner-spinner" class="spinner" style="display: none; margin: 1rem auto;"></div>
+            </form>
+        </div>
+
+        <!-- Step 2: Results -->
+        <div id="planner-results" style="flex: 2; min-width: 300px; display: none;" class="fade-in">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 2rem;">
+                <h2>Your Itinerary</h2>
+                <div>
+                    <button class="btn btn-secondary" onclick="window.print()">Download Plan</button>
+                    <button class="btn btn-secondary" id="share-plan-btn">Share Plan</button>
+                </div>
+            </div>
+
+            <!-- Budget Breakdown -->
+            <div style="background: var(--cream); padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                <h3>Budget Breakdown</h3>
+                <div class="budget-bar">
+                    <div class="budget-segment accom" style="width: 0%;"></div>
+                    <div class="budget-segment food" style="width: 0%;"></div>
+                    <div class="budget-segment trans" style="width: 0%;"></div>
+                    <div class="budget-segment act" style="width: 0%;"></div>
+                </div>
+                <div id="budget-legend" style="display: flex; gap: 1rem; font-size: 0.9rem; margin-top: 0.5rem; flex-wrap: wrap;"></div>
+                <p id="budget-status" style="margin-top: 1rem; font-weight: bold;"></p>
+            </div>
+
+            <!-- Stay Suggestions -->
+            <h3>Suggested Stays</h3>
+            <div class="card-grid" id="stay-suggestions" style="margin-bottom: 2rem;"></div>
+
+            <!-- Day-wise Plan -->
+            <h3>Day-by-Day Plan</h3>
+            <div id="itinerary-accordion" style="margin-bottom: 2rem;"></div>
+
+            <!-- Local Tips -->
+            <div style="background: var(--ivory); border-left: 4px solid var(--saffron); padding: 1rem;">
+                <h3>Tips for your trip</h3>
+                <ul id="planner-tips" style="padding-left: 1.5rem;"></ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const budgetSlider = document.getElementById('budget');
+        const budgetVal = document.getElementById('budget-val');
+        if(budgetSlider && budgetVal) {
+            budgetSlider.addEventListener('input', (e) => budgetVal.textContent = e.target.value);
+        }
+    });
+</script>
+{% endblock %}
