@@ -19,6 +19,8 @@ class HiddenGem(db.Model):
     local_tip = db.Column(db.String(300), nullable=True)
     average_price = db.Column(db.String(50), nullable=True)
     closed_days = db.Column(db.String(100), nullable=True)
+    rush_time = db.Column(db.String(100), nullable=True)
+    bus_routes = db.Column(db.String(200), nullable=True)
 
     def to_dict(self):
         return {
@@ -28,7 +30,9 @@ class HiddenGem(db.Model):
             'is_featured': self.is_featured, 'lat': self.lat, 'lng': self.lng,
             'best_time_to_visit': self.best_time_to_visit, 'entry_fee': self.entry_fee,
             'local_tip': self.local_tip, 'average_price': self.average_price,
-            'closed_days': self.closed_days
+            'closed_days': self.closed_days,
+            'rush_time': self.rush_time,
+            'bus_routes': self.bus_routes
         }
 
 class Artisan(db.Model):
@@ -43,6 +47,8 @@ class Artisan(db.Model):
     image_url = db.Column(db.String(300), nullable=True)
     average_price = db.Column(db.String(50), nullable=True)
     closed_days = db.Column(db.String(100), nullable=True)
+    rush_time = db.Column(db.String(100), nullable=True)
+    bus_routes = db.Column(db.String(200), nullable=True)
 
     def to_dict(self):
         return {
@@ -50,7 +56,9 @@ class Artisan(db.Model):
             'years_experience': self.years_experience, 'short_bio': self.short_bio,
             'bio': self.bio, 'contact_email': self.contact_email,
             'whatsapp': self.whatsapp, 'image_url': self.image_url,
-            'average_price': self.average_price, 'closed_days': self.closed_days
+            'average_price': self.average_price, 'closed_days': self.closed_days,
+            'rush_time': self.rush_time,
+            'bus_routes': self.bus_routes
         }
 
 class ContactMessage(db.Model):
@@ -97,6 +105,8 @@ class LocalFood(db.Model):
     is_vegetarian = db.Column(db.Boolean, default=False)
     local_secret = db.Column(db.String(300), nullable=True)
     closed_days = db.Column(db.String(100), nullable=True)
+    rush_time = db.Column(db.String(100), nullable=True)
+    bus_routes = db.Column(db.String(200), nullable=True)
 
     def to_dict(self):
         return {
@@ -106,7 +116,9 @@ class LocalFood(db.Model):
             'lat': self.lat, 'lng': self.lng, 'open_hours': self.open_hours,
             'best_dish': self.best_dish, 'image_url': self.image_url,
             'is_vegetarian': self.is_vegetarian, 'local_secret': self.local_secret,
-            'closed_days': self.closed_days
+            'closed_days': self.closed_days,
+            'rush_time': self.rush_time,
+            'bus_routes': self.bus_routes
         }
 
 class StayOption(db.Model):
@@ -140,6 +152,8 @@ class MarketStall(db.Model):
     image_url = db.Column(db.String(300), nullable=True)
     open_days = db.Column(db.String(100), nullable=True)
     open_time = db.Column(db.String(100), nullable=True)
+    rush_time = db.Column(db.String(100), nullable=True)
+    bus_routes = db.Column(db.String(200), nullable=True)
     artisan = db.relationship('Artisan', backref=db.backref('market_stalls', lazy=True))
 
     def to_dict(self):
@@ -149,7 +163,8 @@ class MarketStall(db.Model):
             'market_area': self.market_area, 'stall_type': self.stall_type,
             'products_sold': self.products_sold, 'demo_video_url': self.demo_video_url,
             'story': self.story, 'image_url': self.image_url,
-            'open_days': self.open_days, 'open_time': self.open_time
+            'open_days': self.open_days, 'open_time': self.open_time, 'rush_time': self.rush_time
+            , 'bus_routes': self.bus_routes
         }
 
 class InquiryCart(db.Model):

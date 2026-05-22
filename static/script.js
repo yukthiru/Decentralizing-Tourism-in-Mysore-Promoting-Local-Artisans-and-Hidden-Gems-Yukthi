@@ -116,9 +116,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <p>${gem.description}</p>
                                 ${gem.local_tip ? `<p class="local-secret">💡 ${gem.local_tip}</p>` : ''}
                                 <p><strong>Hours:</strong> ${openHours}</p>
-                                ${gem.closed_days ? `<p><strong>Closed:</strong> ${gem.closed_days}</p>` : ''}
                                 ${gem.average_price ? `<p><strong>Avg Price:</strong> ${gem.average_price}</p>` : ''}
+                                ${gem.closed_days ? `<p><strong>Open Days:</strong> All except ${gem.closed_days}</p>` : `<p><strong>Open Days:</strong> Daily</p>`}
                                 <p><small>Time: ${gem.best_time_to_visit || 'Anytime'} | Fee: ${gem.entry_fee || 'Free'}</small></p>
+                                ${gem.rush_time ? `<p><strong>Peak:</strong> ${gem.rush_time}</p>` : ''}
+                                ${gem.bus_routes ? `<p><strong>Bus Routes:</strong> ${gem.bus_routes}</p>` : ''}
                                 <a href="${gem.directions_url}" target="_blank" class="btn btn-secondary" style="margin-top:auto;">Directions</a>
                             `;
                             grid.appendChild(card);
@@ -163,8 +165,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             <p>${f.description}</p>
                             <p><b>Must Try:</b> ${f.specialty_dish}</p>
                             <p><strong>Open:</strong> ${f.open_hours || 'Check locally'}</p>
-                            ${f.closed_days ? `<p><strong>Closed:</strong> ${f.closed_days}</p>` : ''}
+                            ${f.closed_days ? `<p><strong>Open Days:</strong> All except ${f.closed_days}</p>` : `<p><strong>Open Days:</strong> Daily</p>`}
                             <p class="price-range">${f.price_range}</p>
+                            ${f.rush_time ? `<p><strong>Peak:</strong> ${f.rush_time}</p>` : ''}
+                            ${f.bus_routes ? `<p><strong>Bus Routes:</strong> ${f.bus_routes}</p>` : ''}
                             ${f.local_secret ? `<p class="local-secret">🤫 ${f.local_secret}</p>` : ''}
                         `;
                         grid.appendChild(card);
@@ -396,6 +400,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <p><b>Specialty:</b> ${stall.products_sold}</p>
                                     <p>${stall.story}</p>
                                     <p><small>Open: ${stall.open_days} | ${stall.open_time}</small></p>
+                                    ${stall.rush_time ? `<p><strong>Peak:</strong> ${stall.rush_time}</p>` : ''}
+                                    ${stall.bus_routes ? `<p><strong>Bus Routes:</strong> ${stall.bus_routes}</p>` : ''}
                                     ${stall.demo_video_url ? `<button class="btn btn-secondary">Watch Demo</button>` : ''}
                                     <button class="btn btn-primary" onclick="addToCart(null, ${stall.id})" style="margin-top:1rem;">Add to Inquiry</button>
                                 </div>
@@ -464,6 +470,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <p>${gem.description}</p>
                             ${gem.local_tip ? `<p class="local-secret">💡 ${gem.local_tip}</p>` : ''}
                             <p><strong>Hours:</strong> ${openHours}</p>
+                            ${gem.closed_days ? `<p><strong>Open Days:</strong> All except ${gem.closed_days}</p>` : `<p><strong>Open Days:</strong> Daily</p>`}
                             <a href="${gem.directions_url}" target="_blank" class="btn btn-secondary" style="margin-top:auto;">Get Directions</a>
                         `;
                         gemGrid.appendChild(card);

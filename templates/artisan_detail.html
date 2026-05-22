@@ -11,7 +11,9 @@
             <h1>{{ artisan.name }}</h1>
             <p class="artisan-meta">{{ artisan.craft }} &bull; {{ artisan.years_experience }} Years of Experience</p>
             <p><strong>Open Hours:</strong> 10:00 AM - 6:00 PM</p>
-            {% if artisan.closed_days %}<p><strong>Closed:</strong> {{ artisan.closed_days }}</p>{% endif %}
+            <p><strong>Peak Time:</strong> {{ artisan.rush_time or '10:00 AM - 6:00 PM' }}</p>
+            <p><strong>Open Days:</strong> {% if artisan.closed_days %}All except {{ artisan.closed_days }}{% else %}Daily{% endif %}</p>
+            {% if artisan.bus_routes %}<p><strong>Bus Routes:</strong> {{ artisan.bus_routes }}</p>{% endif %}
             {% if artisan.average_price %}<p><strong>Average Price:</strong> {{ artisan.average_price }}</p>{% endif %}
         </div>
         
