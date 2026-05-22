@@ -99,6 +99,15 @@ document.addEventListener('DOMContentLoaded', () => {
                                 m.bindPopup(`<b>${gem.name}</b><br><i>${gem.category}</i><br><a href="${gem.directions_url}" target="_blank">Directions</a>`);
                                 markers.push(m);
                             }
+                            const categoryHours = {
+                                'Heritage': '9:00 AM - 5:00 PM',
+                                'Food': '7:00 AM - 10:00 PM',
+                                'Nature': 'Sunrise - Sunset',
+                                'Spiritual': '6:00 AM - 8:00 PM',
+                                'Art': '10:00 AM - 6:00 PM',
+                                'Artisan Workshop': '10:00 AM - 5:00 PM'
+                            };
+                            const openHours = gem.open_hours || categoryHours[gem.category] || '8:00 AM - 6:00 PM';
                             const card = document.createElement('div');
                             card.className = 'card fade-in appear';
                             card.innerHTML = `
@@ -106,6 +115,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <span class="card-badge">${gem.category}</span>
                                 <p>${gem.description}</p>
                                 ${gem.local_tip ? `<p class="local-secret">💡 ${gem.local_tip}</p>` : ''}
+                                <p><strong>Hours:</strong> ${openHours}</p>
+                                ${gem.closed_days ? `<p><strong>Closed:</strong> ${gem.closed_days}</p>` : ''}
+                                ${gem.average_price ? `<p><strong>Avg Price:</strong> ${gem.average_price}</p>` : ''}
                                 <p><small>Time: ${gem.best_time_to_visit || 'Anytime'} | Fee: ${gem.entry_fee || 'Free'}</small></p>
                                 <a href="${gem.directions_url}" target="_blank" class="btn btn-secondary" style="margin-top:auto;">Directions</a>
                             `;
@@ -150,6 +162,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             <span class="card-badge">${f.food_type}</span>
                             <p>${f.description}</p>
                             <p><b>Must Try:</b> ${f.specialty_dish}</p>
+                            <p><strong>Open:</strong> ${f.open_hours || 'Check locally'}</p>
+                            ${f.closed_days ? `<p><strong>Closed:</strong> ${f.closed_days}</p>` : ''}
                             <p class="price-range">${f.price_range}</p>
                             ${f.local_secret ? `<p class="local-secret">🤫 ${f.local_secret}</p>` : ''}
                         `;
@@ -433,6 +447,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     gemGrid.innerHTML = '';
                     if (data.length === 0) { gemGrid.innerHTML = '<p>No gems found.</p>'; return; }
                     data.forEach(gem => {
+                        const categoryHours = {
+                            'Heritage': '9:00 AM - 5:00 PM',
+                            'Food': '7:00 AM - 10:00 PM',
+                            'Nature': 'Sunrise - Sunset',
+                            'Spiritual': '6:00 AM - 8:00 PM',
+                            'Art': '10:00 AM - 6:00 PM',
+                            'Artisan Workshop': '10:00 AM - 5:00 PM'
+                        };
+                        const openHours = gem.open_hours || categoryHours[gem.category] || '8:00 AM - 6:00 PM';
                         const card = document.createElement('div');
                         card.className = 'card fade-in appear';
                         card.innerHTML = `
@@ -440,6 +463,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <span class="card-badge">${gem.category}</span>
                             <p>${gem.description}</p>
                             ${gem.local_tip ? `<p class="local-secret">💡 ${gem.local_tip}</p>` : ''}
+                            <p><strong>Hours:</strong> ${openHours}</p>
                             <a href="${gem.directions_url}" target="_blank" class="btn btn-secondary" style="margin-top:auto;">Get Directions</a>
                         `;
                         gemGrid.appendChild(card);
@@ -482,5 +506,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
+    }
+
+    const guidePresence = document.getElementById('guide-presence');
+    if (guidePresence) {
+        const updateGuidePresence = () => {
+            const now = new Date();
+            guidePresence.textContent = now.toLocaleString('en-IN', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true
+            });
+        };
+        updateGuidePresence();
+        setInterval(updateGuidePresence, 1000);
     }
 });

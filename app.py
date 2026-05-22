@@ -127,6 +127,10 @@ def tour_planner():
 def virtual_market():
     return render_template('virtual_market.html')
 
+@app.route('/tourist-guide')
+def tourist_guide():
+    return render_template('tourist_guide.html')
+
 # --- API ROUTES ---
 
 @app.route('/api/gems')

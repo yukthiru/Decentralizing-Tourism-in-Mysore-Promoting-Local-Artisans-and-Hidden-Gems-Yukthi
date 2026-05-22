@@ -17,6 +17,8 @@ class HiddenGem(db.Model):
     best_time_to_visit = db.Column(db.String(100), nullable=True)
     entry_fee = db.Column(db.String(50), nullable=True)
     local_tip = db.Column(db.String(300), nullable=True)
+    average_price = db.Column(db.String(50), nullable=True)
+    closed_days = db.Column(db.String(100), nullable=True)
 
     def to_dict(self):
         return {
@@ -25,7 +27,8 @@ class HiddenGem(db.Model):
             'directions_url': self.directions_url, 'image_url': self.image_url,
             'is_featured': self.is_featured, 'lat': self.lat, 'lng': self.lng,
             'best_time_to_visit': self.best_time_to_visit, 'entry_fee': self.entry_fee,
-            'local_tip': self.local_tip
+            'local_tip': self.local_tip, 'average_price': self.average_price,
+            'closed_days': self.closed_days
         }
 
 class Artisan(db.Model):
@@ -38,13 +41,16 @@ class Artisan(db.Model):
     contact_email = db.Column(db.String(100), nullable=True)
     whatsapp = db.Column(db.String(20), nullable=True)
     image_url = db.Column(db.String(300), nullable=True)
+    average_price = db.Column(db.String(50), nullable=True)
+    closed_days = db.Column(db.String(100), nullable=True)
 
     def to_dict(self):
         return {
             'id': self.id, 'name': self.name, 'craft': self.craft,
             'years_experience': self.years_experience, 'short_bio': self.short_bio,
             'bio': self.bio, 'contact_email': self.contact_email,
-            'whatsapp': self.whatsapp, 'image_url': self.image_url
+            'whatsapp': self.whatsapp, 'image_url': self.image_url,
+            'average_price': self.average_price, 'closed_days': self.closed_days
         }
 
 class ContactMessage(db.Model):
@@ -90,6 +96,7 @@ class LocalFood(db.Model):
     image_url = db.Column(db.String(300), nullable=True)
     is_vegetarian = db.Column(db.Boolean, default=False)
     local_secret = db.Column(db.String(300), nullable=True)
+    closed_days = db.Column(db.String(100), nullable=True)
 
     def to_dict(self):
         return {
@@ -98,7 +105,8 @@ class LocalFood(db.Model):
             'price_range': self.price_range, 'location': self.location,
             'lat': self.lat, 'lng': self.lng, 'open_hours': self.open_hours,
             'best_dish': self.best_dish, 'image_url': self.image_url,
-            'is_vegetarian': self.is_vegetarian, 'local_secret': self.local_secret
+            'is_vegetarian': self.is_vegetarian, 'local_secret': self.local_secret,
+            'closed_days': self.closed_days
         }
 
 class StayOption(db.Model):

@@ -26,6 +26,11 @@
             <p>Browse stalls, watch demos, and connect with sellers.</p>
             <a href="{{ url_for('virtual_market') }}" class="btn btn-secondary" style="margin-top: auto;">Virtual Market</a>
         </div>
+        <div class="card" style="background: var(--ivory); border: 1px solid var(--gold); text-align: center;">
+            <h3 style="color: var(--saffron);">Tourist Guide</h3>
+            <p>Learn the best local routes, guide tips, and travel advice for Mysore.</p>
+            <a href="{{ url_for('tourist_guide') }}" class="btn btn-secondary" style="margin-top: auto;">View Guide</a>
+        </div>
         {% if featured_food %}
         <div class="card" style="background: var(--ivory); border: 1px solid var(--gold); text-align: center;">
             <h3 style="color: var(--saffron);">Featured Local Food</h3>
