@@ -1,0 +1,100 @@
+================================================================================
+MYSORE UNSEEN - ADD IMAGES TO ARTISANS & FOOD DISCOVERY
+================================================================================
+
+QUICK START (3 Steps):
+
+1. SEED DATABASE (if not already seeded):
+   python seed_data.py
+
+2. FETCH IMAGES FROM GOOGLE:
+   python update_images_from_google.py
+   
+   This will:
+   - Fetch images for 6 artisans
+   - Fetch images for 18 food establishments
+   - Fetch images for 14 products
+   - Fetch images for 13 hidden gems
+   - Fetch images for 6 market stalls
+   - Update database with image URLs
+   Time: ~15-20 minutes
+
+3. RUN APPLICATION:
+   python app.py
+   
+   Then open: http://localhost:5000/artisans
+              http://localhost:5000/food-discovery
+
+================================================================================
+
+WHAT GETS UPDATED:
+
+Artisan Explore Section:
+- KSIC Silk Weavers
+- Sri Krishna Murthy & Team (Rosewood Inlay)
+- Raghupathi Bhat (Ganjifa Card Painting)
+- Mysore Sandalwood Carvers Guild
+- B.S. Yogiraj Shilpi (Sculpture)
+- Ramu Agarbathi Rollers (Incense)
+
+Food Discovery Section (18 places):
+- Tegu Mess
+- Brahmin's Soda Factory
+- Anima Bhavan
+- Poojari's Fish Land
+- Sri Durga Bhavan
+- Bonda Mane
+- Mahadeshwara Butter Dosa
+- Depth N Green
+- Malgudi Cafe
+- Mahesh Prasad
+- Sapa Bakery & Cafe
+- The Old House
+- Hotel RRR
+- Amruth Gobi Centre
+- Lakshman Mess
+- Usman Dry Gobi
+- Raju's Kadai
+- Lakshmi Tea Stall
+
+================================================================================
+
+TROUBLESHOOTING:
+
+Q: Database doesn't exist?
+A: Run: python seed_data.py
+
+Q: Images not downloading?
+A: Check internet connection and try again
+
+Q: Images not showing on website?
+A: Hard refresh browser (Ctrl+Shift+R)
+
+Q: Want to retry failed downloads?
+A: Update the script line to add --overwrite (see RUNNING_IMAGE_SCRIPTS.md)
+
+================================================================================
+
+FILES REFERENCE:
+
+Primary Script:
+- update_images_from_google.py      ← USE THIS
+
+Documentation:
+- IMAGES_SETUP.md                   ← Quick guide
+- RUNNING_IMAGE_SCRIPTS.md          ← Technical details
+- IMAGE_IMPLEMENTATION_SUMMARY.md   ← Complete overview
+
+================================================================================
+
+ADVANCED OPTIONS (see RUNNING_IMAGE_SCRIPTS.md):
+
+Fetch only specific categories:
+  python fetch_images_comprehensive.py --target artisans
+  python fetch_images_comprehensive.py --target food
+  python fetch_images_comprehensive.py --target products
+
+Overwrite existing images:
+  python fetch_images_comprehensive.py --overwrite
+
+================================================================================

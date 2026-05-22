@@ -28,6 +28,12 @@
         </div>
         {% if featured_food %}
         <div class="card" style="background: var(--ivory); border: 1px solid var(--gold); text-align: center;">
+            {% if featured_food.image_url %}
+            <img src="{{ featured_food.image_url }}" alt="{{ featured_food.name }}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">
+            {% if featured_food.image_credit %}
+            <p class="image-credit" style="font-size: 0.8rem; color: #666; margin-top: 0.25rem;">{{ featured_food.image_credit }}</p>
+            {% endif %}
+            {% endif %}
             <h3 style="color: var(--saffron);">Featured Local Food</h3>
             <p><strong>{{ featured_food.name }}</strong> - {{ featured_food.specialty_dish }}</p>
             <a href="{{ url_for('food_discovery') }}" class="btn btn-secondary" style="margin-top: auto;">Food Discovery</a>
@@ -61,6 +67,12 @@
     <div class="card-grid">
         {% for gem in featured_gems %}
         <div class="card">
+            {% if gem.image_url %}
+            <img src="{{ gem.image_url }}" alt="{{ gem.name }}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">
+            {% if gem.image_credit %}
+            <p class="image-credit" style="font-size: 0.8rem; color: #666; margin-top: 0.25rem;">{{ gem.image_credit }}</p>
+            {% endif %}
+            {% endif %}
             <h3>{{ gem.name }}</h3>
             <span class="card-badge">{{ gem.category }}</span>
             <p>{{ gem.description }}</p>
@@ -78,6 +90,12 @@
     <div class="card-grid">
         {% for artisan in featured_artisans %}
         <div class="card">
+            {% if artisan.image_url %}
+            <img src="{{ artisan.image_url }}" alt="{{ artisan.name }}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">
+            {% if artisan.image_credit %}
+            <p class="image-credit" style="font-size: 0.8rem; color: #666; margin-top: 0.25rem;">{{ artisan.image_credit }}</p>
+            {% endif %}
+            {% endif %}
             <h3>{{ artisan.name }}</h3>
             <span class="card-badge">{{ artisan.craft }}</span>
             <p>{{ artisan.short_bio }}</p>

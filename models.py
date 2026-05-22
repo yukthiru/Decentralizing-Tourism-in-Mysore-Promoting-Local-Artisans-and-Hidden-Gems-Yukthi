@@ -11,6 +11,7 @@ class HiddenGem(db.Model):
     location = db.Column(db.String(100), nullable=False)
     directions_url = db.Column(db.String(200), nullable=True)
     image_url = db.Column(db.String(300), nullable=True)
+    image_credit = db.Column(db.String(200), nullable=True)
     is_featured = db.Column(db.Boolean, default=False)
     lat = db.Column(db.Float, nullable=True)
     lng = db.Column(db.Float, nullable=True)
@@ -23,7 +24,7 @@ class HiddenGem(db.Model):
             'id': self.id, 'name': self.name, 'category': self.category,
             'description': self.description, 'location': self.location,
             'directions_url': self.directions_url, 'image_url': self.image_url,
-            'is_featured': self.is_featured, 'lat': self.lat, 'lng': self.lng,
+            'image_credit': self.image_credit, 'is_featured': self.is_featured, 'lat': self.lat, 'lng': self.lng,
             'best_time_to_visit': self.best_time_to_visit, 'entry_fee': self.entry_fee,
             'local_tip': self.local_tip
         }
@@ -38,13 +39,15 @@ class Artisan(db.Model):
     contact_email = db.Column(db.String(100), nullable=True)
     whatsapp = db.Column(db.String(20), nullable=True)
     image_url = db.Column(db.String(300), nullable=True)
+    image_credit = db.Column(db.String(200), nullable=True)
 
     def to_dict(self):
         return {
             'id': self.id, 'name': self.name, 'craft': self.craft,
             'years_experience': self.years_experience, 'short_bio': self.short_bio,
             'bio': self.bio, 'contact_email': self.contact_email,
-            'whatsapp': self.whatsapp, 'image_url': self.image_url
+            'whatsapp': self.whatsapp, 'image_url': self.image_url,
+            'image_credit': self.image_credit
         }
 
 class ContactMessage(db.Model):
@@ -63,6 +66,7 @@ class ArtisanProduct(db.Model):
     category = db.Column(db.String(50), nullable=False) 
     is_available = db.Column(db.Boolean, default=True)
     image_url = db.Column(db.String(300), nullable=True)
+    image_credit = db.Column(db.String(200), nullable=True)
     artisan = db.relationship('Artisan', backref=db.backref('products', lazy=True))
 
     def to_dict(self):
@@ -72,7 +76,8 @@ class ArtisanProduct(db.Model):
             'artisan_whatsapp': self.artisan.whatsapp if self.artisan else None,
             'product_name': self.product_name, 'description': self.description,
             'price_inr': self.price_inr, 'category': self.category,
-            'is_available': self.is_available, 'image_url': self.image_url
+            'is_available': self.is_available, 'image_url': self.image_url,
+            'image_credit': self.image_credit
         }
 
 class LocalFood(db.Model):
@@ -88,6 +93,7 @@ class LocalFood(db.Model):
     open_hours = db.Column(db.String(100), nullable=True)
     best_dish = db.Column(db.String(100), nullable=True)
     image_url = db.Column(db.String(300), nullable=True)
+    image_credit = db.Column(db.String(200), nullable=True)
     is_vegetarian = db.Column(db.Boolean, default=False)
     local_secret = db.Column(db.String(300), nullable=True)
 
@@ -98,7 +104,7 @@ class LocalFood(db.Model):
             'price_range': self.price_range, 'location': self.location,
             'lat': self.lat, 'lng': self.lng, 'open_hours': self.open_hours,
             'best_dish': self.best_dish, 'image_url': self.image_url,
-            'is_vegetarian': self.is_vegetarian, 'local_secret': self.local_secret
+            'image_credit': self.image_credit, 'is_vegetarian': self.is_vegetarian, 'local_secret': self.local_secret
         }
 
 class StayOption(db.Model):
@@ -110,6 +116,7 @@ class StayOption(db.Model):
     amenities = db.Column(db.String(200), nullable=True)
     description = db.Column(db.Text, nullable=True)
     image_url = db.Column(db.String(300), nullable=True)
+    image_credit = db.Column(db.String(200), nullable=True)
     booking_link = db.Column(db.String(300), nullable=True)
 
     def to_dict(self):
@@ -117,7 +124,7 @@ class StayOption(db.Model):
             'id': self.id, 'name': self.name, 'type': self.type,
             'price_per_night_inr': self.price_per_night_inr, 'location': self.location,
             'amenities': self.amenities, 'description': self.description,
-            'image_url': self.image_url, 'booking_link': self.booking_link
+            'image_url': self.image_url, 'image_credit': self.image_credit, 'booking_link': self.booking_link
         }
 
 class MarketStall(db.Model):
@@ -130,6 +137,7 @@ class MarketStall(db.Model):
     demo_video_url = db.Column(db.String(300), nullable=True)
     story = db.Column(db.Text, nullable=True)
     image_url = db.Column(db.String(300), nullable=True)
+    image_credit = db.Column(db.String(200), nullable=True)
     open_days = db.Column(db.String(100), nullable=True)
     open_time = db.Column(db.String(100), nullable=True)
     artisan = db.relationship('Artisan', backref=db.backref('market_stalls', lazy=True))
@@ -141,7 +149,7 @@ class MarketStall(db.Model):
             'market_area': self.market_area, 'stall_type': self.stall_type,
             'products_sold': self.products_sold, 'demo_video_url': self.demo_video_url,
             'story': self.story, 'image_url': self.image_url,
-            'open_days': self.open_days, 'open_time': self.open_time
+            'image_credit': self.image_credit, 'open_days': self.open_days, 'open_time': self.open_time
         }
 
 class InquiryCart(db.Model):
@@ -161,4 +169,24 @@ class InquiryCart(db.Model):
             'product_name': self.product.product_name if self.product else None,
             'stall_name': self.stall.stall_name if self.stall else None,
             'added_at': self.added_at.isoformat()
+        }
+
+class LocalGuide(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    expertise = db.Column(db.String(100), nullable=False)
+    languages = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    contact_info = db.Column(db.String(100), nullable=True)
+    image_url = db.Column(db.String(300), nullable=True)
+    image_credit = db.Column(db.String(200), nullable=True)
+    rating = db.Column(db.Float, default=4.5)
+    is_certified = db.Column(db.Boolean, default=True)
+
+    def to_dict(self):
+        return {
+            'id': self.id, 'name': self.name, 'expertise': self.expertise,
+            'languages': self.languages, 'description': self.description,
+            'contact_info': self.contact_info, 'image_url': self.image_url,
+            'image_credit': self.image_credit, 'rating': self.rating, 'is_certified': self.is_certified
         }

@@ -10,7 +10,7 @@ import requests
 import random
 import json
 from flask import Flask, render_template, request, jsonify
-from models import db, HiddenGem, Artisan, ContactMessage, ArtisanProduct, LocalFood, StayOption, MarketStall, InquiryCart
+from models import db, HiddenGem, Artisan, ContactMessage, ArtisanProduct, LocalFood, StayOption, MarketStall, InquiryCart, LocalGuide
 
 # --- APP INITIALIZATION ---
 app = Flask(__name__)
@@ -127,6 +127,11 @@ def tour_planner():
 def virtual_market():
     return render_template('virtual_market.html')
 
+@app.route('/guides')
+def guides():
+    guides = LocalGuide.query.all()
+    return render_template('guides.html', guides=guides)
+
 # --- API ROUTES ---
 
 @app.route('/api/gems')
@@ -134,6 +139,11 @@ def api_gems():
     category = request.args.get('category', 'All')
     gems = HiddenGem.query.filter_by(category=category).all() if category and category != 'All' else HiddenGem.query.all()
     return jsonify([gem.to_dict() for gem in gems])
+
+@app.route('/api/guides')
+def api_guides():
+    guides = LocalGuide.query.all()
+    return jsonify([g.to_dict() for g in guides])
 
 @app.route('/api/artisans')
 def api_artisans():

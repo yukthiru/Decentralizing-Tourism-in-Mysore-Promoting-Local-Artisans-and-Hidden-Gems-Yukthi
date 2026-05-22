@@ -23,8 +23,22 @@
 </section>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        if(typeof fetchProducts === 'function') fetchProducts('All');
-    });
+    (function() {
+        const tryLoadProducts = (attempt = 0) => {
+            if (typeof fetchProducts === 'function') {
+                fetchProducts('All');
+                return;
+            }
+            if (attempt < 20) {
+                window.setTimeout(() => tryLoadProducts(attempt + 1), 100);
+            }
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => tryLoadProducts());
+        } else {
+            tryLoadProducts();
+        }
+    })();
 </script>
 {% endblock %}

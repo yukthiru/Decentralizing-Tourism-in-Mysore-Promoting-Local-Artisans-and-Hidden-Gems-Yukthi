@@ -55,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         const card = document.createElement('div');
                         card.className = 'card product-card fade-in appear';
                         card.innerHTML = `
+                            ${p.image_url ? `<img src="${p.image_url}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">` : ''}
                             <h3>${p.product_name}</h3>
                             <span class="card-badge">${p.category}</span>
                             <p>${p.description}</p>
@@ -102,6 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             const card = document.createElement('div');
                             card.className = 'card fade-in appear';
                             card.innerHTML = `
+                                ${gem.image_url ? `<img src="${gem.image_url}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">` : ''}
                                 <h3>${gem.name}</h3>
                                 <span class="card-badge">${gem.category}</span>
                                 <p>${gem.description}</p>
@@ -146,6 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         const card = document.createElement('div');
                         card.className = 'card food-card fade-in appear';
                         card.innerHTML = `
+                            ${f.image_url ? `<img src="${f.image_url}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">` : ''}
                             <h3>${f.name} ${f.is_vegetarian ? '🟢' : '🔴'}</h3>
                             <span class="card-badge">${f.food_type}</span>
                             <p>${f.description}</p>
@@ -267,6 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 data.stay_suggestions.forEach(s => {
                     stayGrid.innerHTML += `
                         <div class="card">
+                            ${s.image_url ? `<img src="${s.image_url}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">` : ''}
                             <h3>${s.name}</h3>
                             <p><b>Type:</b> ${s.type}</p>
                             <p class="price-range">₹${s.price_per_night_inr} / night</p>
@@ -378,6 +382,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         c.innerHTML += `
                             <div class="card stall-card fade-in appear" style="flex-direction:row; flex-wrap:wrap; gap:2rem; align-items:center;">
                                 <div style="flex:2; min-width:300px;">
+                                    ${stall.image_url ? `<img src="${stall.image_url}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">` : ''}
                                     <h3>${stall.stall_name} <span class="card-badge">${stall.market_area}</span></h3>
                                     <p><b>Specialty:</b> ${stall.products_sold}</p>
                                     <p>${stall.story}</p>
@@ -436,7 +441,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         const card = document.createElement('div');
                         card.className = 'card fade-in appear';
                         card.innerHTML = `
-                            <h3>${gem.name}</h3>
+                            ${gem.image_url ? `<img src="${gem.image_url}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">` : ''}
+                                <h3>${gem.name}</h3>
                             <span class="card-badge">${gem.category}</span>
                             <p>${gem.description}</p>
                             ${gem.local_tip ? `<p class="local-secret">💡 ${gem.local_tip}</p>` : ''}

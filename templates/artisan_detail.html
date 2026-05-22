@@ -7,6 +7,12 @@
     
     <!-- --- ARTISAN FULL PROFILE --- -->
     <div class="artisan-profile fade-in">
+        {% if artisan.image_url %}
+        <img src="{{ artisan.image_url }}" alt="{{ artisan.name }}" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: 8px; margin-bottom: 2rem;">
+        {% if artisan.image_credit %}
+        <p class="image-credit" style="font-size: 0.85rem; color: #666; margin-top: -1.25rem; margin-bottom: 1rem;">{{ artisan.image_credit }}</p>
+        {% endif %}
+        {% endif %}
         <div class="artisan-header">
             <h1>{{ artisan.name }}</h1>
             <p class="artisan-meta">{{ artisan.craft }} &bull; {{ artisan.years_experience }} Years of Experience</p>
