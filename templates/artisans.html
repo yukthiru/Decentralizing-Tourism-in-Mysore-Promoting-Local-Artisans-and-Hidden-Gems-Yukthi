@@ -11,6 +11,9 @@
     <div class="card-grid">
         {% for artisan in artisans %}
         <div class="card fade-in">
+            {% if artisan.image_url %}
+            <img src="{{ artisan.image_url }}" alt="{{ artisan.name }}" style="width:100%; height:180px; object-fit:cover; border-radius:8px 8px 0 0;" onerror="this.src='/static/images/placeholder.svg'">
+            {% endif %}
             <h3>{{ artisan.name }}</h3>
             <span class="card-badge">{{ artisan.craft }}</span>
             <p>{{ artisan.short_bio }}</p>

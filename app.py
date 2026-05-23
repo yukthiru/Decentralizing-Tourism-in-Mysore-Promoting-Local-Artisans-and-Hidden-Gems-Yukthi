@@ -11,6 +11,7 @@ import random
 import json
 from flask import Flask, render_template, request, jsonify
 from models import db, HiddenGem, Artisan, ContactMessage, ArtisanProduct, LocalFood, StayOption, MarketStall, InquiryCart
+from image_data import PLACE_IMAGES, ARTISAN_IMAGES, FOOD_IMAGES, DEFAULT_IMAGE, get_image
 
 # --- APP INITIALIZATION ---
 app = Flask(__name__)
@@ -75,6 +76,23 @@ def generate_fallback_response(prompt, fallback_type):
         })
     return "{}"
 
+
+def get_image_for_item(mapping, item, name_attr='name'):
+    if isinstance(item, dict):
+        item_name = item.get(name_attr)
+        existing_url = item.get('image_url')
+    else:
+        item_name = getattr(item, name_attr, None)
+        existing_url = getattr(item, 'image_url', None)
+    mapped_url = get_image(mapping, item_name)
+    if mapped_url != DEFAULT_IMAGE:
+        return mapped_url
+    if existing_url:
+        if existing_url.startswith('https://upload.wikimedia.org'):
+            return DEFAULT_IMAGE
+        return existing_url
+    return DEFAULT_IMAGE
+
 # --- WEB ROUTES ---
 
 @app.route('/')
@@ -85,6 +103,18 @@ def index():
     food_count = LocalFood.query.count()
     featured_food = LocalFood.query.offset(random.randint(0, max(0, food_count - 1))).first() if food_count > 0 else None
         
+    # attach image URLs for featured items for server-rendered cards
+    for g in featured_gems:
+        try:
+            g.image_url = get_image(PLACE_IMAGES, g.name)
+        except:
+            g.image_url = DEFAULT_IMAGE
+    for a in featured_artisans:
+        try:
+            a.image_url = get_image(ARTISAN_IMAGES, a.name)
+        except:
+            a.image_url = DEFAULT_IMAGE
+
     return render_template('index.html', featured_gems=featured_gems, featured_artisans=featured_artisans, featured_food=featured_food)
 
 @app.route('/explore')
@@ -93,11 +123,22 @@ def explore():
 
 @app.route('/artisans')
 def artisans():
-    return render_template('artisans.html', artisans=Artisan.query.all())
+    artisans = Artisan.query.all()
+    for a in artisans:
+        try:
+            a.image_url = get_image(ARTISAN_IMAGES, a.name)
+        except:
+            a.image_url = DEFAULT_IMAGE
+    return render_template('artisans.html', artisans=artisans)
 
 @app.route('/artisans/<int:artisan_id>')
 def artisan_detail(artisan_id):
-    return render_template('artisan_detail.html', artisan=Artisan.query.get_or_404(artisan_id))
+    artisan = Artisan.query.get_or_404(artisan_id)
+    try:
+        artisan.image_url = get_image(ARTISAN_IMAGES, artisan.name)
+    except:
+        artisan.image_url = DEFAULT_IMAGE
+    return render_template('artisan_detail.html', artisan=artisan)
 
 @app.route('/contact')
 def contact():
@@ -137,11 +178,17 @@ def tourist_guide():
 def api_gems():
     category = request.args.get('category', 'All')
     gems = HiddenGem.query.filter_by(category=category).all() if category and category != 'All' else HiddenGem.query.all()
-    return jsonify([gem.to_dict() for gem in gems])
+    gem_dicts = [gem.to_dict() for gem in gems]
+    for gem in gem_dicts:
+        gem['image_url'] = get_image_for_item(PLACE_IMAGES, gem, 'name')
+    return jsonify(gem_dicts)
 
 @app.route('/api/artisans')
 def api_artisans():
-    return jsonify([a.to_dict() for a in Artisan.query.all()])
+    artisan_dicts = [a.to_dict() for a in Artisan.query.all()]
+    for artisan in artisan_dicts:
+        artisan['image_url'] = get_image_for_item(ARTISAN_IMAGES, artisan, 'name')
+    return jsonify(artisan_dicts)
 
 @app.route('/contact', methods=['POST'])
 def submit_contact():
@@ -163,7 +210,10 @@ def api_products():
 
 @app.route('/api/gems/map')
 def api_gems_map():
-    return jsonify([gem.to_dict() for gem in HiddenGem.query.all()])
+    gem_dicts = [gem.to_dict() for gem in HiddenGem.query.all()]
+    for gem in gem_dicts:
+        gem['image_url'] = get_image_for_item(PLACE_IMAGES, gem, 'name')
+    return jsonify(gem_dicts)
 
 @app.route('/api/generate-tour', methods=['POST'])
 def api_generate_tour():
@@ -189,7 +239,11 @@ def api_food():
     query = LocalFood.query
     if food_type and food_type != 'All': query = query.filter_by(food_type=food_type)
     if veg_only: query = query.filter_by(is_vegetarian=True)
-    return jsonify([f.to_dict() for f in query.all()])
+    food_dicts = [f.to_dict() for f in query.all()]
+    for food in food_dicts:
+        food_name = f"{food.get('specialty_dish','')} {food.get('name','')}"
+        food['image_url'] = get_image(FOOD_IMAGES, food_name)
+    return jsonify(food_dicts)
 
 @app.route('/api/plan-tour', methods=['POST'])
 def api_plan_tour():
@@ -223,7 +277,11 @@ def api_plan_tour():
 def api_market_stalls():
     area = request.args.get('area', 'All')
     stalls = MarketStall.query.filter_by(market_area=area).all() if area and area != 'All' else MarketStall.query.all()
-    return jsonify([s.to_dict() for s in stalls])
+    stall_dicts = [s.to_dict() for s in stalls]
+    for stall in stall_dicts:
+        stall_name = f"{stall.get('stall_name','')} {stall.get('market_area','')}"
+        stall['image_url'] = get_image(PLACE_IMAGES, stall_name)
+    return jsonify(stall_dicts)
 
 @app.route('/api/cart/add', methods=['POST'])
 def api_cart_add():

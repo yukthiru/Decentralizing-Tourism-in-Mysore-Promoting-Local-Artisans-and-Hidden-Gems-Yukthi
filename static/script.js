@@ -111,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             const card = document.createElement('div');
                             card.className = 'card fade-in appear';
                             card.innerHTML = `
+                                ${gem.image_url ? `<img src="${gem.image_url}" alt="${gem.name}" class="card-image" onerror="this.src='/static/images/placeholder.svg'">` : ''}
                                 <h3>${gem.name}</h3>
                                 <span class="card-badge">${gem.category}</span>
                                 <p>${gem.description}</p>
@@ -160,6 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         const card = document.createElement('div');
                         card.className = 'card food-card fade-in appear';
                         card.innerHTML = `
+                            ${f.image_url ? `<img src="${f.image_url}" alt="${f.name}" class="card-image" onerror="this.src='/static/images/placeholder.svg'">` : ''}
                             <h3>${f.name} ${f.is_vegetarian ? '🟢' : '🔴'}</h3>
                             <span class="card-badge">${f.food_type}</span>
                             <p>${f.description}</p>
@@ -394,8 +396,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     c.innerHTML = '';
                     data.forEach(stall => {
                         c.innerHTML += `
-                            <div class="card stall-card fade-in appear" style="flex-direction:row; flex-wrap:wrap; gap:2rem; align-items:center;">
-                                <div style="flex:2; min-width:300px;">
+                            <div class="card stall-card fade-in appear" style="flex-direction:row; flex-wrap:wrap; gap:2rem; align-items:flex-start;">
+                                ${stall.image_url ? `<img src="${stall.image_url}" alt="${stall.stall_name}" class="card-image" style="flex:1 1 280px; max-width:320px;" onerror="this.src='/static/images/placeholder.svg'">` : ''}
+                                <div style="flex:2; min-width:300px; display:flex; flex-direction:column; gap:0.75rem;">
                                     <h3>${stall.stall_name} <span class="card-badge">${stall.market_area}</span></h3>
                                     <p><b>Specialty:</b> ${stall.products_sold}</p>
                                     <p>${stall.story}</p>
@@ -403,7 +406,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     ${stall.rush_time ? `<p><strong>Peak:</strong> ${stall.rush_time}</p>` : ''}
                                     ${stall.bus_routes ? `<p><strong>Bus Routes:</strong> ${stall.bus_routes}</p>` : ''}
                                     ${stall.demo_video_url ? `<button class="btn btn-secondary">Watch Demo</button>` : ''}
-                                    <button class="btn btn-primary" onclick="addToCart(null, ${stall.id})" style="margin-top:1rem;">Add to Inquiry</button>
+                                    <button class="btn btn-primary" onclick="addToCart(null, ${stall.id})" style="margin-top:1rem; align-self:flex-start;">Add to Inquiry</button>
                                 </div>
                             </div>
                         `;
@@ -465,6 +468,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         const card = document.createElement('div');
                         card.className = 'card fade-in appear';
                         card.innerHTML = `
+                            ${gem.image_url ? `<img src="${gem.image_url}" alt="${gem.name}" class="card-image" onerror="this.src='/static/images/placeholder.svg'">` : ''}
                             <h3>${gem.name}</h3>
                             <span class="card-badge">${gem.category}</span>
                             <p>${gem.description}</p>

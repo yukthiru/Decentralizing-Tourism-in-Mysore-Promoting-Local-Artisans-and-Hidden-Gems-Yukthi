@@ -1,5 +1,14 @@
 from app import app
 from models import db, HiddenGem, Artisan, ArtisanProduct, LocalFood, StayOption, MarketStall
+from image_data import PLACE_IMAGES, ARTISAN_IMAGES, FOOD_IMAGES, DEFAULT_IMAGE, get_image
+
+
+def assign_image_urls(items, mapping, name_attr='name', fallback_attr=None):
+    for item in items:
+        name = getattr(item, name_attr, None)
+        if not name and fallback_attr:
+            name = getattr(item, fallback_attr, None)
+        item.image_url = get_image(mapping, name)
 
 def seed_data():
     with app.app_context():
@@ -36,6 +45,7 @@ def seed_data():
             HiddenGem(name="Old Palace Elephant Stables", category="Heritage", description="A quiet stable complex near Mysore Palace showcasing royal elephant gear and heritage architecture.", location="Mysore Palace", directions_url="https://maps.google.com/?q=Mysore+Palace+Elephant+Stables", is_featured=False, lat=12.3040, lng=76.6555, best_time_to_visit="Afternoon", entry_fee="Free", average_price="Free", closed_days="None", rush_time="Afternoon (3–5 PM)", local_tip="Ask the guards about the history of the royal procession elephants."),
             HiddenGem(name="Sri Nandi Temple (Monolithic Bull)", category="Spiritual", description="A massive 15-foot monolithic Nandi (bull) statue carved out of a single boulder on Chamundi Hill, dating back to 1659.", location="Chamundi Hill", directions_url="https://maps.google.com/?q=Nandi+Statue+Mysore", is_featured=True, lat=12.2855, lng=76.6710, best_time_to_visit="Early Morning", entry_fee="Free", average_price="Free", closed_days="None", rush_time="Early Morning (6–9 AM)", local_tip="Walk down the ancient stone steps from here instead of taking the road for a scenic trek.")
         ]
+        assign_image_urls(gems, PLACE_IMAGES, 'name')
         db.session.add_all(gems)
 
         print("Seeding Real Artisans...")
@@ -47,6 +57,7 @@ def seed_data():
             Artisan(name="B.S. Yogiraj Shilpi", craft="Traditional Sculpture", years_experience=60, short_bio="Master sculptor continuing the Shilpashastra tradition.", bio="Yogiraj Shilpi comes from a long lineage of palace sculptors. His family has carved many of the iconic statues seen around Mysore, utilizing traditional texts to perfect the proportions.", contact_email="shilpi.studio@example.com", whatsapp="", average_price="₹4000-18000", closed_days="Sundays", rush_time="Afternoon (2–5 PM)"),
             Artisan(name="Ramu Agarbathi Rollers", craft="Incense Making", years_experience=30, short_bio="Hand-rolling the fragrant essence of Mysore.", bio="Before machine-made incense took over, Mysore's economy thrived on hand-rolled agarbathis. This collective still rolls traditional halmaddi and sandalwood paste onto bamboo splints by hand.", contact_email="ramu.aroma@example.com", whatsapp="", average_price="₹200-500", closed_days="None", rush_time="Morning (9–12 PM)")
         ]
+        assign_image_urls(artisans, ARTISAN_IMAGES, 'name')
         db.session.add_all(artisans)
         db.session.commit() # Commit to get IDs
 
@@ -89,6 +100,7 @@ def seed_data():
             LocalFood(name="Usman Dry Gobi", food_type="Street Food", description="A beloved street food cart that turned a simple cauliflower dish into a local sensation.", specialty_dish="Dry Gobi", price_range="₹", location="Chamrajpura", lat=12.3076, lng=76.6479, open_hours="6:00 PM - 10:30 PM", is_vegetarian=True, closed_days="None", rush_time="Evening (7–9 PM)", local_secret="The coating is extra crispy and seasoned perfectly, served with green chutney, onions, and cucumber."),
             LocalFood(name="Hotel Mahesh Prasad", food_type="Restaurant", description="Built in a traditional architectural style, this spot is a favorite for hearty, traditional vegetarian thalis.", specialty_dish="Benne Masala Dosa", price_range="₹", location="Chamarajapura", lat=12.3000, lng=76.6400, open_hours="7:00 AM - 10:00 PM", is_vegetarian=True, closed_days="Sundays", rush_time="Breakfast (7–10 AM)", local_secret="Locals queue here for Benne Masala Dosa, Sambar Bonda, and Bonda Soup.")
         ]
+        assign_image_urls(foods, FOOD_IMAGES, 'specialty_dish', 'name')
         db.session.add_all(foods)
 
         print("Seeding Authentic Stay Options...")
@@ -110,6 +122,7 @@ def seed_data():
             MarketStall(stall_name="Devaraja Historic Market", market_area="Devaraja Market", stall_type="Traditional Market", products_sold="Mysore Mallige (Jasmine), Spices, Essential Oils", open_days="Daily", open_time="6 AM - 8:30 PM", rush_time="Morning (7–10 AM)", story="A chaotic, authentic, and sensory-rich 130-year-old market giving a glimpse into everyday Mysore life."),
             MarketStall(stall_name="KSIC Silk Weaving Factory Outlet", market_area="Manandavadi Road", stall_type="Textiles", products_sold="Authentic Mysore Silk Saris", open_days="Mon-Sat", open_time="10:30 AM - 7:30 PM", rush_time="Afternoon (2–4 PM)", story="The official factory outlet where you can ensure you are buying genuine, high-quality 100% pure gold zari silk.")
         ]
+        assign_image_urls(stalls, PLACE_IMAGES, 'stall_name', 'market_area')
         db.session.add_all(stalls)
 
         db.session.commit()
