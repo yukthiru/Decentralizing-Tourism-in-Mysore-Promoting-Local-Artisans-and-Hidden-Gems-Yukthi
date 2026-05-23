@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <p>${gem.description}</p>
                                 ${gem.local_tip ? `<p class="local-secret">💡 ${gem.local_tip}</p>` : ''}
                                 <p><strong>Hours:</strong> ${openHours}</p>
-                                ${gem.average_price ? `<p><strong>Avg Price:</strong> ${gem.average_price}</p>` : ''}
+
                                 ${gem.closed_days ? `<p><strong>Open Days:</strong> All except ${gem.closed_days}</p>` : `<p><strong>Open Days:</strong> Daily</p>`}
                                 <p><small>Time: ${gem.best_time_to_visit || 'Anytime'} | Fee: ${gem.entry_fee || 'Free'}</small></p>
                                 ${gem.rush_time ? `<p><strong>Peak:</strong> ${gem.rush_time}</p>` : ''}
