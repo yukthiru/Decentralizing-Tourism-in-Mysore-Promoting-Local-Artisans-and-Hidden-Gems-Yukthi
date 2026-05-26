@@ -10,6 +10,12 @@
         <div class="artisan-header">
             <h1>{{ artisan.name }}</h1>
             <p class="artisan-meta">{{ artisan.craft }} &bull; {{ artisan.years_experience }} Years of Experience</p>
+            {% if artisan.location %}
+            <p><strong>Location:</strong> <a href="https://www.google.com/maps/search/?api=1&query={{ artisan.location|urlencode }}" target="_blank">{{ artisan.location }}</a></p>
+            <a href="https://www.google.com/maps/search/?api=1&query={{ artisan.location|urlencode }}" target="_blank" class="btn btn-secondary" style="margin-bottom:1rem;">Get Directions</a>
+            {% else %}
+            <p><strong>Location:</strong> Unknown</p>
+            {% endif %}
             <p><strong>Open Hours:</strong> 10:00 AM - 6:00 PM</p>
             <p><strong>Peak Time:</strong> {{ artisan.rush_time or '10:00 AM - 6:00 PM' }}</p>
             <p><strong>Open Days:</strong> {% if artisan.closed_days %}All except {{ artisan.closed_days }}{% else %}Daily{% endif %}</p>

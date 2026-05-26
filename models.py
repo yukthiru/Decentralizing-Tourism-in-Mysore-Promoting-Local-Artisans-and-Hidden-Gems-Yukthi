@@ -45,6 +45,7 @@ class Artisan(db.Model):
     contact_email = db.Column(db.String(100), nullable=True)
     whatsapp = db.Column(db.String(20), nullable=True)
     image_url = db.Column(db.String(300), nullable=True)
+    location = db.Column(db.String(100), nullable=True)
     average_price = db.Column(db.String(50), nullable=True)
     closed_days = db.Column(db.String(100), nullable=True)
     rush_time = db.Column(db.String(100), nullable=True)
@@ -56,6 +57,7 @@ class Artisan(db.Model):
             'years_experience': self.years_experience, 'short_bio': self.short_bio,
             'bio': self.bio, 'contact_email': self.contact_email,
             'whatsapp': self.whatsapp, 'image_url': self.image_url,
+            'location': self.location,
             'average_price': self.average_price, 'closed_days': self.closed_days,
             'rush_time': self.rush_time,
             'bus_routes': self.bus_routes
@@ -145,6 +147,7 @@ class MarketStall(db.Model):
     stall_name = db.Column(db.String(100), nullable=False)
     artisan_id = db.Column(db.Integer, db.ForeignKey('artisan.id'), nullable=True)
     market_area = db.Column(db.String(100), nullable=False)
+    location = db.Column(db.String(100), nullable=True)
     stall_type = db.Column(db.String(50), nullable=False)
     products_sold = db.Column(db.String(200), nullable=False)
     demo_video_url = db.Column(db.String(300), nullable=True)
@@ -160,7 +163,7 @@ class MarketStall(db.Model):
         return {
             'id': self.id, 'stall_name': self.stall_name, 'artisan_id': self.artisan_id,
             'artisan_name': self.artisan.name if self.artisan else None,
-            'market_area': self.market_area, 'stall_type': self.stall_type,
+            'market_area': self.market_area, 'location': self.location, 'stall_type': self.stall_type,
             'products_sold': self.products_sold, 'demo_video_url': self.demo_video_url,
             'story': self.story, 'image_url': self.image_url,
             'open_days': self.open_days, 'open_time': self.open_time, 'rush_time': self.rush_time

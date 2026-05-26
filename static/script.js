@@ -164,6 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             ${f.image_url ? `<img src="${f.image_url}" alt="${f.name}" class="card-image" onerror="this.src='/static/images/placeholder.svg'">` : ''}
                             <h3>${f.name} ${f.is_vegetarian ? '🟢' : '🔴'}</h3>
                             <span class="card-badge">${f.food_type}</span>
+                            ${f.lat && f.lng ? `<p><strong>Location:</strong> <a href="https://www.google.com/maps/search/?api=1&query=${f.lat},${f.lng}" target="_blank">${f.location || (f.lat + ',' + f.lng)}</a></p>` : (f.location ? `<p><strong>Location:</strong> <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(f.location)}" target="_blank">${f.location}</a></p>` : `<p><strong>Location:</strong> Unknown</p>`) }
                             <p>${f.description}</p>
                             <p><b>Must Try:</b> ${f.specialty_dish}</p>
                             <p><strong>Open:</strong> ${f.open_hours || 'Check locally'}</p>
@@ -172,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             ${f.rush_time ? `<p><strong>Peak:</strong> ${f.rush_time}</p>` : ''}
                             ${f.bus_routes ? `<p><strong>Bus Routes:</strong> ${f.bus_routes}</p>` : ''}
                             ${f.local_secret ? `<p class="local-secret">🤫 ${f.local_secret}</p>` : ''}
+                            ${(f.lat && f.lng) || f.location ? `<a href="https://www.google.com/maps/search/?api=1&query=${f.lat && f.lng ? f.lat + ',' + f.lng : encodeURIComponent(f.location)}" target="_blank" class="btn btn-secondary">Get Directions</a>` : ''}
                         `;
                         grid.appendChild(card);
                     });
@@ -403,6 +405,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <p><b>Specialty:</b> ${stall.products_sold}</p>
                                     <p>${stall.story}</p>
                                     <p><small>Open: ${stall.open_days} | ${stall.open_time}</small></p>
+                                    ${stall.location ? `<p><strong>Location:</strong> <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(stall.location)}" target="_blank">${stall.location}</a></p>` : ''}
                                     ${stall.rush_time ? `<p><strong>Peak:</strong> ${stall.rush_time}</p>` : ''}
                                     ${stall.bus_routes ? `<p><strong>Bus Routes:</strong> ${stall.bus_routes}</p>` : ''}
                                     ${stall.demo_video_url ? `<button class="btn btn-secondary">Watch Demo</button>` : ''}
@@ -475,7 +478,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             ${gem.local_tip ? `<p class="local-secret">💡 ${gem.local_tip}</p>` : ''}
                             <p><strong>Hours:</strong> ${openHours}</p>
                             ${gem.closed_days ? `<p><strong>Open Days:</strong> All except ${gem.closed_days}</p>` : `<p><strong>Open Days:</strong> Daily</p>`}
-                            <a href="${gem.directions_url}" target="_blank" class="btn btn-secondary" style="margin-top:auto;">Get Directions</a>
+                            ${gem.lat && gem.lng ? `<p><strong>Location:</strong> <a href="https://www.google.com/maps/search/?api=1&query=${gem.lat},${gem.lng}" target="_blank">${gem.lat}, ${gem.lng}</a></p>` : (gem.location ? `<p><strong>Location:</strong> <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(gem.location)}" target="_blank">${gem.location}</a></p>` : '')}
+                            ${gem.directions_url ? `<a href="${gem.directions_url}" target="_blank" class="btn btn-secondary" style="margin-top:auto;">Get Directions</a>` : ''}
                         `;
                         gemGrid.appendChild(card);
                     });

@@ -16,12 +16,22 @@
             {% endif %}
             <h3>{{ artisan.name }}</h3>
             <span class="card-badge">{{ artisan.craft }}</span>
+            {% if artisan.location %}
+            <p><strong>Location:</strong> <a href="https://www.google.com/maps/search/?api=1&query={{ artisan.location|urlencode }}" target="_blank">{{ artisan.location }}</a></p>
+            {% else %}
+            <p><strong>Location:</strong> Unknown</p>
+            {% endif %}
             <p>{{ artisan.short_bio }}</p>
             <p><strong>Peak Time:</strong> {{ artisan.rush_time or '10:00 AM - 6:00 PM' }}</p>
             <p><strong>Open Days:</strong> {% if artisan.closed_days %}All except {{ artisan.closed_days }}{% else %}Daily{% endif %}</p>
             {% if artisan.bus_routes %}<p><strong>Bus Routes:</strong> {{ artisan.bus_routes }}</p>{% endif %}
             {% if artisan.average_price %}<p><strong>Avg Price:</strong> {{ artisan.average_price }}</p>{% endif %}
-            <a href="{{ url_for('artisan_detail', artisan_id=artisan.id) }}" class="btn btn-primary" style="margin-top: auto; text-align: center;">View Profile</a>
+            <div style="display:grid; gap:0.75rem; margin-top:auto;">
+                {% if artisan.location %}
+                <a href="https://www.google.com/maps/search/?api=1&query={{ artisan.location|urlencode }}" target="_blank" class="btn btn-secondary">Get Directions</a>
+                {% endif %}
+                <a href="{{ url_for('artisan_detail', artisan_id=artisan.id) }}" class="btn btn-primary">View Profile</a>
+            </div>
         </div>
         {% else %}
         <p>No artisans found in the database.</p>
