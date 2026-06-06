@@ -261,6 +261,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    let currentTourData = null;
+
+    function saveTour() {
+        if (!currentTourData) return;
+
+        fetch('/api/save-tour', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(currentTourData)
+        }).then(async (res) => {
+            const result = await res.json();
+            if (result.success) {
+                alert('Tour saved successfully!');
+            } else if (res.status === 401) {
+                alert('Please login to save your tour');
+                window.location.href = '/login';
+            } else {
+                alert('Failed to save tour: ' + (result.error || 'Unknown error'));
+            }
+        }).catch(() => {
+            alert('Failed to save tour.');
+        });
+    }
+
+    window.saveTour = saveTour;
+
     // --- TOUR PLANNER ---
     const plannerForm = document.getElementById('planner-form');
     if(plannerForm) {
@@ -283,6 +309,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }).then(r => r.json()).then(data => {
                 document.getElementById('planner-spinner').style.display = 'none';
                 document.getElementById('planner-results').style.display = 'block';
+                document.getElementById('save-tour-btn').style.display = 'inline-block';
+                currentTourData = { ...payload, ...data };
                 
                 const stayGrid = document.getElementById('stay-suggestions');
                 stayGrid.innerHTML = '';

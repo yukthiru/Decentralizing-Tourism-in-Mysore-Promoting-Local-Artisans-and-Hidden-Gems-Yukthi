@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="container fade-in" style="margin-top: 100px;">
+    <h1 class="section-title">My Saved Tours</h1>
+    <p style="text-align: center; margin-bottom: 2rem;">Review tours you saved earlier.</p>
+
+    <div id="saved-tours-container" style="display: grid; gap: 1.5rem;"></div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const container = document.getElementById('saved-tours-container');
+        container.innerHTML = '<p>Loading your tours...</p>';
+
+        fetch('/api/my-tours')
+            .then(r => r.json())
+            .then(data => {
+                if (!data.success) {
+                    container.innerHTML = `<p style="color: red;">${data.error || 'Unable to load tours.'}</p>`;
+                    return;
+                }
+                if (!data.tours || data.tours.length === 0) {
+                    container.innerHTML = '<p>No saved tours yet. Save a tour from the Tour Planner page.</p>';
+                    return;
+                }
+                container.innerHTML = '';
+                data.tours.forEach(tour => {
+                    const item = document.createElement('div');
+                    item.className = 'card';
+                    const itinerary = tour.itinerary ? JSON.parse(tour.itinerary) : [];
+                    item.innerHTML = `
+                        <h3>Saved Tour - ₹${tour.budget || 'N/A'} for ${tour.days || 'N/A'} days</h3>
+                        <p><b>Interests:</b> ${tour.interests || 'None'}</p>
+                        <p><b>Saved on:</b> ${tour.created_at || 'Unknown'}</p>
+                        <div>
+                            ${itinerary.map(day => `
+                                <div style="margin-bottom:0.75rem;">
+                                    <strong>Day ${day.day}</strong>: ${day.morning}, ${day.afternoon}, ${day.evening}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    container.appendChild(item);
+                });
+            })
+            .catch(() => {
+                container.innerHTML = '<p style="color: red;">Could not load saved tours.</p>';
+            });
+    });
+</script>
+{% endblock %}

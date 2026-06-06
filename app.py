@@ -9,12 +9,26 @@ import os
 import requests
 import random
 import json
-from flask import Flask, render_template, request, jsonify
-from models import db, HiddenGem, Artisan, ContactMessage, ArtisanProduct, LocalFood, StayOption, MarketStall, InquiryCart
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for, flash
+from werkzeug.security import generate_password_hash, check_password_hash
+from models import db, HiddenGem, Artisan, ContactMessage, ArtisanProduct, LocalFood, StayOption, MarketStall, InquiryCart, User
 from image_data import PLACE_IMAGES, ARTISAN_IMAGES, FOOD_IMAGES, DEFAULT_IMAGE, get_image
+from supabase import create_client
+from dotenv import load_dotenv
+
+load_dotenv()
+
+SUPABASE_URL = os.environ.get('SUPABASE_URL')
+SUPABASE_KEY = os.environ.get('SUPABASE_KEY')
+if SUPABASE_URL and SUPABASE_KEY:
+    supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+else:
+    supabase = None
 
 # --- APP INITIALIZATION ---
 app = Flask(__name__)
+# session secret for Flask
+app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'dev-secret-change-me')
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'mysore_unseen.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -144,6 +158,119 @@ def artisan_detail(artisan_id):
 def contact():
     return render_template('contact.html')
 
+
+@app.context_processor
+def inject_user():
+    return {'current_user': session.get('user')}
+
+
+def login_required(fn):
+    from functools import wraps
+    @wraps(fn)
+    def wrapper(*args, **kwargs):
+        if not session.get('user'):
+            return redirect(url_for('login'))
+        return fn(*args, **kwargs)
+    return wrapper
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+
+    form = request.form
+    email = form.get('email', '').strip().lower()
+    password = form.get('password', '')
+    if not email or not password:
+        return render_template('login.html', error='Missing email or password')
+
+    if supabase:
+        try:
+            res = supabase.auth.sign_in_with_password({'email': email, 'password': password})
+            user_info = None
+            if isinstance(res, dict):
+                user_info = res.get('user')
+                login_error = res.get('error') or res.get('message')
+            else:
+                user_info = getattr(res, 'user', None)
+                login_error = getattr(res, 'error', None) or getattr(res, 'message', None)
+
+            if user_info:
+                session['user'] = {'email': user_info.get('email')}
+                return redirect(url_for('index'))
+            if login_error:
+                print(f"Supabase auth error: {login_error}")
+        except Exception as e:
+            print(f"Supabase auth error: {e}")
+
+    user = User.query.filter_by(email=email).first()
+    if user and check_password_hash(user.password_hash, password):
+        session['user'] = {'email': user.email}
+        return redirect(url_for('index'))
+
+    return render_template('login.html', error='Invalid email or password')
+
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'GET':
+        return render_template('signup.html')
+
+    form = request.form
+    email = form.get('email', '').strip().lower()
+    password = form.get('password', '')
+    confirm_password = form.get('confirm_password', '')
+
+    if not email or not password or not confirm_password:
+        return render_template('signup.html', error='All fields are required')
+    if password != confirm_password:
+        return render_template('signup.html', error='Passwords do not match')
+    if len(password) < 6:
+        return render_template('signup.html', error='Password must be at least 6 characters')
+    if User.query.filter_by(email=email).first():
+        return render_template('signup.html', error='Email already registered')
+
+    signup_error = None
+    if supabase:
+        try:
+            signup_res = supabase.auth.sign_up({'email': email, 'password': password})
+            if isinstance(signup_res, dict):
+                signup_error = signup_res.get('error') or signup_res.get('message')
+            else:
+                signup_error = getattr(signup_res, 'error', None) or getattr(signup_res, 'message', None)
+
+            if signup_error:
+                normalized_error = signup_error.lower()
+                # Keep live validation errors from Supabase, but fall back to local signup on rate limits or temporary issues
+                if 'password' in normalized_error or 'invalid' in normalized_error:
+                    return render_template('signup.html', error=signup_error)
+                if 'email already exists' in normalized_error or 'already registered' in normalized_error:
+                    if User.query.filter_by(email=email).first():
+                        return render_template('signup.html', error='Email already registered')
+                    print(f"Supabase sign up warning: {signup_error}; continuing with local signup fallback")
+                else:
+                    print(f"Supabase sign up warning: {signup_error}; continuing with local signup fallback")
+        except Exception as e:
+            print(f"Supabase sign up error: {e}")
+
+    user = User(email=email, password_hash=generate_password_hash(password))
+    db.session.add(user)
+    db.session.commit()
+    session['user'] = {'email': email}
+    return redirect(url_for('index'))
+
+
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    try:
+        if supabase and hasattr(supabase.auth, 'sign_out'):
+            supabase.auth.sign_out()
+    except Exception:
+        pass
+    return redirect(url_for('index'))
+
 @app.route('/marketplace')
 def marketplace():
     return render_template('marketplace.html')
@@ -163,6 +290,53 @@ def food_discovery():
 @app.route('/tour-planner')
 def tour_planner():
     return render_template('tour_planner.html')
+
+@app.route('/api/save-tour', methods=['POST'])
+def save_tour():
+    if not session.get('user'):
+        return jsonify({'success': False, 'error': 'Login required'}), 401
+
+    data = request.get_json()
+    if not supabase:
+        return jsonify({'success': False, 'error': 'Supabase not connected'}), 500
+
+    try:
+        supabase.table('saved_tours').insert({
+            'user_email': session['user']['email'],
+            'days': data.get('days'),
+            'budget': data.get('budget_inr'),
+            'interests': ', '.join(data.get('interests', [])),
+            'itinerary': json.dumps(data.get('itinerary'))
+        }).execute()
+        return jsonify({'success': True})
+    except Exception as e:
+        print(f"Save tour error: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/my-tours')
+def my_tours_api():
+    if not session.get('user'):
+        return jsonify({'success': False, 'error': 'Login required'}), 401
+
+    if not supabase:
+        return jsonify({'success': False, 'error': 'Supabase not connected'}), 500
+
+    try:
+        response = supabase.table('saved_tours')\
+            .select('*')\
+            .eq('user_email', session['user']['email'])\
+            .order('created_at', desc=True)\
+            .execute()
+        return jsonify({'success': True, 'tours': response.data})
+    except Exception as e:
+        print(f"Fetch saved tours error: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/my-tours')
+def my_tours_page():
+    if not session.get('user'):
+        return redirect(url_for('login'))
+    return render_template('my_tours.html')
 
 @app.route('/virtual-market')
 def virtual_market():
@@ -192,9 +366,25 @@ def api_artisans():
 
 @app.route('/contact', methods=['POST'])
 def submit_contact():
-    data = request.get_json()
+    # Support JSON and form submissions
+    data = request.get_json() or request.form
+    if hasattr(data, 'to_dict'):
+        data = data.to_dict()
     if not data or not data.get('name') or not data.get('email') or not data.get('message'):
         return jsonify({'success': False, 'error': 'Missing required fields'}), 400
+
+    # Insert into Supabase if configured (non-blocking on failure)
+    if supabase:
+        try:
+            supabase.table('contact_messages').insert({
+                'name': data['name'],
+                'email': data['email'],
+                'message': data['message']
+            }).execute()
+        except Exception as e:
+            print(f"Supabase insert error: {e}")
+
+    # Also store locally in the existing SQLite DB for backwards compatibility
     db.session.add(ContactMessage(name=data['name'], email=data['email'], message=data['message']))
     db.session.commit()
     return jsonify({'success': True})

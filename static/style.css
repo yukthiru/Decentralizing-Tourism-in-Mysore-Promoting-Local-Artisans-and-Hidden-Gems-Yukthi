@@ -165,6 +165,17 @@ input:checked + .slider:before { transform: translateX(26px); }
 .form-control { width: 100%; padding: 0.8rem; border: 1px solid #ccc; border-radius: 4px; font-family: var(--font-body); background: var(--ivory); }
 textarea.form-control { resize: vertical; height: 150px; }
 
+.auth-container { max-width: 420px; margin: 6rem auto 4rem; background: var(--cream); padding: 2.5rem 2rem; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+.auth-container h1 { margin-bottom: 1.5rem; font-size: 2rem; color: var(--saffron); }
+.auth-container form { display: grid; gap: 1rem; }
+.auth-container label { display: block; font-weight: 600; color: var(--espresso); }
+.auth-container input { width: 100%; padding: 0.85rem 1rem; border: 1px solid #c2b8a1; border-radius: 8px; background: var(--ivory); font-family: var(--font-body); }
+.auth-container button { width: 100%; padding: 0.95rem 1rem; border-radius: 8px; border: none; background: var(--saffron); color: var(--ivory); cursor: pointer; font-weight: 700; transition: var(--transition); }
+.auth-container button:hover { background: var(--gold); }
+.auth-container p { margin-top: 1rem; font-size: 0.95rem; }
+.auth-container a { color: var(--saffron); font-weight: 700; }
+.error { color: #9b1d06; font-weight: 700; margin-bottom: 1rem; }
+
 /* Back to top */
 .back-to-top { position: fixed; bottom: 2rem; right: 2rem; background: var(--saffron); color: var(--ivory); width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; opacity: 0; transition: var(--transition); z-index: 99; border: none; font-size: 1.5rem; text-decoration: none; pointer-events: none; }
 .back-to-top.visible { opacity: 1; pointer-events: auto; }

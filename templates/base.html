@@ -31,6 +31,14 @@
                 </li>
                 <li><a href="{{ url_for('artisans') }}">Artisans</a></li>
                 <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                {% if current_user %}
+                    <li><a href="{{ url_for('my_tours_page') }}">My Saved Tours</a></li>
+                    <li><a href="#">{{ current_user.email }}</a></li>
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Sign In</a></li>
+                    <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+                {% endif %}
             </ul>
             <button class="hamburger">☰</button>
         </nav>
