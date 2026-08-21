@@ -123,10 +123,26 @@ def login_required(fn):
     return wrapper
 
 
+@app.before_request
+def require_sign_in():
+    """Keep the application features behind the sign-in page."""
+    public_endpoints = {'login', 'signup', 'static'}
+    if request.endpoint in public_endpoints or session.get('user'):
+        return None
+
+    if request.path.startswith('/api/'):
+        return jsonify({'error': 'Sign in required'}), 401
+
+    return redirect(url_for('login'))
+
+
 # --- WEB ROUTES ---
 
 @app.route('/')
 def index():
+    if not session.get('user'):
+        return redirect(url_for('login'))
+
     try:
         featured_gems = HiddenGem.query.filter_by(is_featured=True).limit(3).all()
         featured_artisans = Artisan.query.limit(3).all()

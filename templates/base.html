@@ -14,24 +14,23 @@
         <nav>
             <div class="logo"><a href="{{ url_for('index') }}">Mysore Unseen</a></div>
             <ul class="nav-links">
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="{{ url_for('explore') }}">Explore</a></li>
-                <!-- Dropdown for Discover features -->
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle">Discover &#9662;</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{{ url_for('hidden_gems') }}">Hidden Gems Map</a></li>
-                        <li><a href="{{ url_for('marketplace') }}">Artisan Marketplace</a></li>
-                        <li><a href="{{ url_for('food_discovery') }}">Food Discovery</a></li>
-                        <li><a href="{{ url_for('walking_tour') }}">Walking Tour</a></li>
-                        <li><a href="{{ url_for('tour_planner') }}">Tour Planner</a></li>
-                        <li><a href="{{ url_for('virtual_market') }}">Virtual Market</a></li>
-                        <li><a href="{{ url_for('tourist_guide') }}">Tourist Guide</a></li>
-                    </ul>
-                </li>
-                <li><a href="{{ url_for('artisans') }}">Artisans</a></li>
-                <li><a href="{{ url_for('contact') }}">Contact</a></li>
                 {% if current_user %}
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('explore') }}">Explore</a></li>
+                    <!-- Dropdown for Discover features -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle">Discover &#9662;</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ url_for('hidden_gems') }}">Hidden Gems Map</a></li>
+                            <li><a href="{{ url_for('food_discovery') }}">Food Discovery</a></li>
+                            <li><a href="{{ url_for('walking_tour') }}">Walking Tour</a></li>
+                            <li><a href="{{ url_for('tour_planner') }}">Tour Planner</a></li>
+                            <li><a href="{{ url_for('virtual_market') }}">Virtual Market</a></li>
+                            <li><a href="{{ url_for('tourist_guide') }}">Tourist Guide</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="{{ url_for('artisans') }}">Artisans</a></li>
+                    <li><a href="{{ url_for('contact') }}">Contact</a></li>
                     <li><a href="{{ url_for('my_tours_page') }}">My Saved Tours</a></li>
                     <li><a href="#">{{ current_user.email }}</a></li>
                     <li><a href="{{ url_for('logout') }}">Logout</a></li>
